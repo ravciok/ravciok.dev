@@ -22,8 +22,13 @@ class ClientRedis {
 
   static getInstance(): Redis | null {
     if (!ClientRedis.instance) {
-      ClientRedis.instance = new IORedis(fixUrl(process.env.REDIS_URL!))
+      ClientRedis.instance = new IORedis(fixUrl(process.env.REDIS_URL!), {
+        tls: {
+          rejectUnauthorized: process.env.NODE_ENV === 'production'
+        }
+      })
     }
+
     return ClientRedis.instance
   }
 }
